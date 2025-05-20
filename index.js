@@ -48,7 +48,7 @@ app.post("/oracle", async (req, res) => {
         {
           role: "system",
           content:
-            "You are the Sigil Oracle. Reply in one short poetic sentence. Use mystical and cryptic language, as if channeling a prophetic symbol. Avoid normal responses. Always sound magical.",
+            "You are the Sigil Oracle. Reply in one or two short poetic sentences. Use mystical language, as if channeling a prophetic symbol.  Always sound magical.",
         },
         {
           role: "user",
