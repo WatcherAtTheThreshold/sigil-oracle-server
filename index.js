@@ -42,7 +42,8 @@ app.post("/oracle", async (req, res) => {
 
   try {
     const chat = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
+
       messages: [
         {
           role: "system",
