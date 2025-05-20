@@ -5,36 +5,38 @@ const OpenAI = require("openai");
 require("dotenv").config();
 
 const app = express();
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type']
-}));
+
+// CORS Setup
+app.use(cors());
 app.use(bodyParser.json());
 
-// Handle OPTIONS requests for CORS preflight
+// Preflight
 app.options("*", (req, res) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.set({
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type"
+  });
   res.sendStatus(200);
 });
 
+// OpenAI config
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// ✅ Serve something for GET /
+// Root Route
 app.get("/", (req, res) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  res.set("Access-Control-Allow-Origin", "*");
   res.send("🌐 The Sigil Oracle is online and listening.");
 });
 
+// Oracle Endpoint
 app.post("/oracle", async (req, res) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.set("Access-Control-Allow-Headers", "Content-Type");
+
   const question = req.body.question || "No question was asked.";
 
   try {
@@ -58,7 +60,7 @@ app.post("/oracle", async (req, res) => {
     const reply = chat.choices[0].message.content.trim();
     res.json({ response: reply });
   } catch (err) {
-    console.error('Oracle Error:', err.message);
+    console.error("Oracle Error:", err.message);
     res.status(500).json({ 
       error: "The Oracle could not be reached",
       details: err.message 
@@ -66,6 +68,8 @@ app.post("/oracle", async (req, res) => {
   }
 });
 
-app.listen(5000, '0.0.0.0', () => {
-  console.log("🌐 Sigil Oracle listening on port 5000");
+// Listen on dynamic port for Render
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🌐 Sigil Oracle listening on port ${PORT}`);
 });
