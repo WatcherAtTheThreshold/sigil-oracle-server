@@ -38,6 +38,7 @@ app.post("/oracle", async (req, res) => {
   res.set("Access-Control-Allow-Headers", "Content-Type");
 
   const question = req.body.question || "No question was asked.";
+  console.log(`🔮 Received question: ${question}`);
 
   try {
     const chat = await openai.chat.completions.create({
@@ -57,10 +58,18 @@ app.post("/oracle", async (req, res) => {
       max_tokens: 60,
     });
 
-    const reply = chat.choices[0].message.content.trim();
-    res.json({ response: reply });
+    const raw = chat.choices?.[0]?.message?.content;
+    console.log(`✨ Oracle replied: ${raw}`);
+
+    if (!raw) {
+      res.status(502).json({ response: null, error: "No response from OpenAI" });
+    } else {
+      const reply = raw.trim();
+      res.json({ response: reply });
+    }
+
   } catch (err) {
-    console.error("Oracle Error:", err.message);
+    console.error("❌ Oracle Error:", err.message);
     res.status(500).json({ 
       error: "The Oracle could not be reached",
       details: err.message 
