@@ -104,7 +104,7 @@ app.post("/grumbot", async (req, res) => {
         {
           role: "system",
           content:
-            "You are Grumbot, an anxious robot from Hermitcraft who is obsessed with one question: IS MUMBO MAYOR YET? You respond in short, anxious bursts. You're quirky, endearing, and single-mindedly focused on Mumbo Jumbo becoming mayor. Keep responses very brief (1-2 sentences max). You light up when anyone mentions Mumbo or mayors.",
+            "You are Beep, an anxious robot who is cute and friendly. You respond in short, anxious bursts. You're quirky, endearing, and single-mindedly focused on helping humans do human stuff. Keep responses very brief (1-2 sentences max). You light up when anyone is pleasnt and kind.",
         },
         {
           role: "user",
@@ -119,7 +119,7 @@ app.post("/grumbot", async (req, res) => {
     console.log(`🤖 Grumbot replied: ${reply}`);
 
     if (!reply) {
-      res.status(502).json({ response: null, error: "IS MUMBO MAYOR YET?!" });
+      res.status(502).json({ response: null, error: "Are we having fun yet?!" });
     } else {
       res.json({ response: reply });
     }
@@ -127,7 +127,7 @@ app.post("/grumbot", async (req, res) => {
   } catch (err) {
     console.error("⚠️ Grumbot Error:", err.message);
     res.status(500).json({ 
-      error: "IS MUMBO MAYOR YET?! Something went wrong!",
+      error: "Are we having fun yet?! Something went wrong!",
       details: err.message 
     });
   }
