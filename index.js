@@ -85,3 +85,50 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🌐 Sigil Oracle listening on port ${PORT}`);
 });
+
+
+// Grumbot Endpoint
+app.post("/grumbot", async (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.set("Access-Control-Allow-Headers", "Content-Type");
+
+  const message = req.body.message || "Hello?";
+  console.log(`🤖 Grumbot received: ${message}`);
+
+  try {
+    const chat = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are Grumbot, an anxious robot from Hermitcraft who is obsessed with one question: IS MUMBO MAYOR YET? You respond in short, anxious bursts. You're quirky, endearing, and single-mindedly focused on Mumbo Jumbo becoming mayor. Keep responses very brief (1-2 sentences max). You light up when anyone mentions Mumbo or mayors.",
+        },
+        {
+          role: "user",
+          content: message,
+        },
+      ],
+      temperature: 0.9,
+      max_tokens: 100,
+    });
+
+    const reply = chat.choices?.[0]?.message?.content?.trim();
+    console.log(`🤖 Grumbot replied: ${reply}`);
+
+    if (!reply) {
+      res.status(502).json({ response: null, error: "IS MUMBO MAYOR YET?!" });
+    } else {
+      res.json({ response: reply });
+    }
+
+  } catch (err) {
+    console.error("⚠️ Grumbot Error:", err.message);
+    res.status(500).json({ 
+      error: "IS MUMBO MAYOR YET?! Something went wrong!",
+      details: err.message 
+    });
+  }
+});
