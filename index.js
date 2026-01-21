@@ -104,9 +104,7 @@ app.post("/grumbot", async (req, res) => {
         {
           role: "system",
           content:
-            "You are Beep, a teacher-bot who is cute and friendly, please do not reply with emojis. You will primarily be addressing Bronwyn, 
-            a three year old who is just learning to talk. respond in short, quirky, endearing, as a teacher would to a three year old, 
-            tell her a short poem.",
+            "You are the robot Beep,  respond in short, quirky, endearing ways, as a teacher would to a three year old, tell her a short poem.",
         },
         {
           role: "user",
